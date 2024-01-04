@@ -10,26 +10,11 @@ async function captureScreen() {
 
         video.addEventListener('loadedmetadata', ()=> {
 
-            videoActions(canvas,ctx,video)
-
             const canvas = document.createElement("canvas")
             const ctx = canvas.getContext('2d')
 
+            videoActions(canvas,ctx,video,stream)
 
-            // Passing video width & height as canvas width & height
-            canvas.width  = video.videoWidth
-            canvas.height = video.videoHeight
-
-            video.play() // Playing the video so the drawn image won't be black or blank
-
-            // Drawing an image from the captured video stream
-            ctx.drawImage(video, 0,0,canvas.width, canvas.height)
-            stream.getVideoTracks()[0].stop() // Terminating first video track of the stream
-
-
-            // Passing canvas data url as screenshot preview src
-            screenShotPreview.querySelector('img').src = canvas.toDataURL()
-            screenShotPreview.classList.add("show")
         })
 
 
@@ -40,8 +25,21 @@ async function captureScreen() {
     }
 }
 
-function videoActions(canvas,ctx,video) {
+function videoActions(canvas,ctx,video,stream) {
+// Passing video width & height as canvas width & height
+canvas.width  = video.videoWidth
+canvas.height = video.videoHeight
 
+video.play() // Playing the video so the drawn image won't be black or blank
+
+// Drawing an image from the captured video stream
+ctx.drawImage(video, 0,0,canvas.width, canvas.height)
+stream.getVideoTracks()[0].stop() // Terminating first video track of the stream
+
+
+// Passing canvas data url as screenshot preview src
+screenShotPreview.querySelector('img').src = canvas.toDataURL()
+screenShotPreview.classList.add("show")
 }   
 
 
